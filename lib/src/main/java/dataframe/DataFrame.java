@@ -24,6 +24,9 @@ public class DataFrame {
         return this.schema.fieldNames();
     }
 
+    public static DataFrame empty() {
+        return new DataFrame(new Row[]{}, Schema.empty());
+    }
     public static DataFrame create(List<Object[]> data, String[] columns) {
         var fields = new ArrayList<SchemaField>();
         var firstRow = data.get(0);

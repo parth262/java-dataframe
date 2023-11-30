@@ -9,6 +9,10 @@ public class Schema {
         this.fields = fields;
     }
 
+    public static Schema empty() {
+        return new Schema(new ArrayList<>());
+    }
+
     public List<String> fieldNames() {
         return this.fields.stream().map(SchemaField::name).toList();
     }

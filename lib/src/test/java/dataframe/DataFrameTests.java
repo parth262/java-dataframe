@@ -115,4 +115,13 @@ class DataFrameTests {
             assertNull(row[0]);
         }
     }
+
+    @Test void groupByTest() {
+        var groupedDataFrame = dataframe.groupBy("is_experienced");
+        var isExperienced = dataframe.where(Functions.col("is_experienced"));
+        var isNotExperienced = dataframe.where(Functions.not("is_experienced"));
+
+        assertEquals(isExperienced, groupedDataFrame.getDataFrame(true));
+        assertEquals(isNotExperienced, groupedDataFrame.getDataFrame(false));
+    }
 }

@@ -117,13 +117,11 @@ public class DataFrame {
         var rightField = other.schema.get(rightColumn);
         assert leftField.dataType().equals(rightField.dataType());
         var newSchema = this.schema.join(other.schema);
-//        var otherDataFrameGrouped = other.groupBy(rightColumn);
+        var otherDataFrameGrouped = other.groupBy(rightColumn);
         var newRows = Arrays.stream(this.rows).flatMap(row -> {
             var value = row.get(leftColumn);
-            var equalsTransformation = Functions.isEquals(rightColumn, value);
-            var otherRows = other.where(equalsTransformation);
-//            var otherDataFrame = otherDataFrameGrouped.getDataFrame(value);
-            return row.join(otherRows.rows, newSchema);
+            var otherDataFrame = otherDataFrameGrouped.getDataFrame(value);
+            return row.join(otherDataFrame.rows, newSchema);
         }).toArray(Row[]::new);
         return new DataFrame(newRows, newSchema);
     }
@@ -137,5 +135,19 @@ public class DataFrame {
         stringArray.add(header);
         stringArray.addAll(Arrays.stream(this.rows).map(Row::toString).toList());
         return String.join("\n", stringArray);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DataFrame other = (DataFrame) o;
+        return this.toString().equals(other.toString());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.toString().hashCode();
     }
 }

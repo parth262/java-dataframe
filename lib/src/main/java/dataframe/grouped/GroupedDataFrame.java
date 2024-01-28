@@ -15,7 +15,7 @@ public class GroupedDataFrame {
 
     public final DataFrame getDataFrame(Object... keys) {
         var groupKeys = new GroupKeys(keys);
-        return this.groupedDataFrame.get(groupKeys);
+        return this.groupedDataFrame.getOrDefault(groupKeys, DataFrame.empty());
     }
 
 }

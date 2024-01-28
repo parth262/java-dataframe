@@ -2,11 +2,9 @@ package dataframe.api;
 
 import dataframe.transformation.ColumnTransformation;
 import static dataframe.transformation.ColumnTransformation.of;
-import dataframe.transformation.any.DirectMap;
-import dataframe.transformation.any.IsNull;
-import dataframe.transformation.any.NotNull;
+
+import dataframe.transformation.any.*;
 import dataframe.transformation.bool.Not;
-import dataframe.transformation.any.Identity;
 import dataframe.transformation.date.Format;
 import dataframe.transformation.string.*;
 import dataframe.transformation.supplier.CurrentTimestamp;
@@ -98,6 +96,10 @@ public class Functions {
 
     public static ColumnTransformation notNull(String column) {
         return of(new NotNull(), column);
+    }
+
+    public static ColumnTransformation isEquals(String column, Object value) {
+        return of(new Equals(value), column);
     }
 
 }

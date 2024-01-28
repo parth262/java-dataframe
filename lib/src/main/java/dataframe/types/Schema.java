@@ -26,6 +26,12 @@ public class Schema {
         return -1;
     }
 
+    public SchemaField get(String name) {
+        return this.fields.stream()
+                .filter(schemaField -> schemaField.name().equals(name))
+                .findFirst().orElseThrow();
+    }
+
     @SuppressWarnings("unchecked")
     public Schema addColumn(String newColumn, DataType dataType) {
         if(this.indexOf(newColumn) != -1) {
@@ -55,6 +61,12 @@ public class Schema {
         for(var column: columns) {
             newFields.removeIf(field -> field.name().equals(column));
         }
+        return new Schema(newFields);
+    }
+
+    public Schema join(Schema other) {
+        var newFields = new ArrayList<>(this.fields);
+        newFields.addAll(other.fields);
         return new Schema(newFields);
     }
 

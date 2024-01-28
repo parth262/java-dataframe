@@ -1,10 +1,12 @@
 package dataframe;
 
+import dataframe.api.Functions;
 import dataframe.transformation.ColumnTransformation;
 import dataframe.transformation.any.Identity;
 import dataframe.transformation.bool.Not;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static dataframe.api.Functions.*;
@@ -82,5 +84,35 @@ class DataFrameTests {
         var notExperiencedFilter = ColumnTransformation.of(new Not(), "is_experienced");
         var newDataFrame2 = dataframe.where(notExperiencedFilter);
         assertEquals(1, newDataFrame2.count());
+    }
+
+    @Test void joinTest() {
+        var projectsData = List.of(
+                new Object[]{1, 1, "NCBI", "Data Engineer"},
+                new Object[]{2, 1, "Gogotech", "Data Engineer"},
+                new Object[]{3, 2, "NCBI", "Data Engineer"},
+                new Object[]{4, 2, "IKEA", "Data Engineer"}
+        );
+        var columns = new String[]{"project_id", "employee_id", "project_name", "designation"};
+        var projectsDataFrame = DataFrame.create(projectsData, columns);
+        var joinedDataFrame = dataframe.join(projectsDataFrame, "id", "employee_id");
+        System.out.println(joinedDataFrame);
+        assertEquals(5, joinedDataFrame.count());
+        assertTrue(
+                joinedDataFrame.getColumns().containsAll(dataframe.getColumns())
+                        && joinedDataFrame.getColumns().containsAll(Arrays.asList(columns))
+        );
+        var projectIdForEmployee1 = joinedDataFrame
+                .where(Functions.isEquals("id", 1))
+                .select("project_id");
+        for(var row: projectIdForEmployee1.getRows()) {
+            assertNotNull(row[0]);
+        }
+        var projectIdForEmployee3 = joinedDataFrame
+                .where(Functions.isEquals("id", 3))
+                .select("project_id");
+        for(var row: projectIdForEmployee3.getRows()) {
+            assertNull(row[0]);
+        }
     }
 }

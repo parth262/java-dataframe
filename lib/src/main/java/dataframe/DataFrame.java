@@ -1,5 +1,8 @@
 package dataframe;
 
+import dataframe.api.Functions;
+import dataframe.grouped.GroupKeys;
+import dataframe.grouped.GroupedDataFrame;
 import dataframe.transformation.ColumnTransformation;
 import dataframe.transformation.ColumnTransformationEvaluator;
 import dataframe.types.DataTypeUtil;
@@ -91,6 +94,38 @@ public class DataFrame {
     public DataFrame copy() {
         var rowsCopy = Arrays.copyOf(this.rows, this.rows.length);
         return new DataFrame(rowsCopy, schema.copy());
+    }
+
+    public GroupedDataFrame groupBy(String... columns) {
+        var dataframeGroups = Arrays.stream(this.rows).collect(
+                Collectors.groupingBy(
+                        row -> new GroupKeys(row.select(columns)),
+                        Collectors.collectingAndThen(
+                                Collectors.toList(),
+                                rows -> new DataFrame(
+                                        rows.toArray(Row[]::new),
+                                        this.schema.copy()
+                                )
+                        )
+                )
+        );
+        return new GroupedDataFrame(dataframeGroups);
+    }
+
+    public DataFrame join(DataFrame other, String leftColumn, String rightColumn) {
+        var leftField = this.schema.get(leftColumn);
+        var rightField = other.schema.get(rightColumn);
+        assert leftField.dataType().equals(rightField.dataType());
+        var newSchema = this.schema.join(other.schema);
+//        var otherDataFrameGrouped = other.groupBy(rightColumn);
+        var newRows = Arrays.stream(this.rows).flatMap(row -> {
+            var value = row.get(leftColumn);
+            var equalsTransformation = Functions.isEquals(rightColumn, value);
+            var otherRows = other.where(equalsTransformation);
+//            var otherDataFrame = otherDataFrameGrouped.getDataFrame(value);
+            return row.join(otherRows.rows, newSchema);
+        }).toArray(Row[]::new);
+        return new DataFrame(newRows, newSchema);
     }
 
     @Override

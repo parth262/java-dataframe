@@ -1,8 +1,8 @@
 package dataframe.transformation.any;
 
-import dataframe.transformation.PrimitiveTransformation;
-import dataframe.transformation.base.from.FromAnyTransformation;
-import dataframe.transformation.base.to.ToBooleanTransformation;
+import dataframe.transformation.base.PrimitiveTransformation;
+import dataframe.transformation.types.from.FromAnyTransformation;
+import dataframe.transformation.types.to.ToBooleanTransformation;
 
 import java.util.Objects;
 

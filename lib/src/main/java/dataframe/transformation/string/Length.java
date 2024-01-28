@@ -1,6 +1,6 @@
 package dataframe.transformation.string;
 
-import dataframe.transformation.base.to.ToIntegerTransformation;
+import dataframe.transformation.types.to.ToIntegerTransformation;
 
 public class Length extends StringTransformation implements ToIntegerTransformation {
 

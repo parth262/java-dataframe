@@ -1,6 +1,9 @@
 package dataframe.transformation;
 
 import dataframe.Row;
+import dataframe.transformation.base.PrimitiveArrayTransformation;
+import dataframe.transformation.base.PrimitiveTransformation;
+import dataframe.transformation.base.SupplierTransformation;
 
 import java.util.Arrays;
 
@@ -19,7 +22,11 @@ public class ColumnTransformationEvaluator {
         }
         if(transformation instanceof PrimitiveTransformation primitiveTransformation) {
             if(columnTransformation.columns().length > 1) {
-                throw new RuntimeException("This transformation takes only 1 column");
+                var errorMessage = String.format(
+                    "%s: This transformation takes only 1 column",
+                    primitiveTransformation.getClass().getSimpleName()
+                );
+                throw new RuntimeException(errorMessage);
             }
             var columnValue = row.get(columnTransformation.columns()[0]);
             return primitiveTransformation.apply(columnValue);

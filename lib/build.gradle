@@ -16,9 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation 'software.amazon.awssdk:s3:2.20.102'
-    implementation 'com.jcraft:jsch:0.1.55'
-
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.3'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }

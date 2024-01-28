@@ -1,7 +1,7 @@
 package dataframe.transformation.supplier;
 
-import dataframe.transformation.SupplierTransformation;
-import dataframe.transformation.base.to.ToTimestampTransformation;
+import dataframe.transformation.base.SupplierTransformation;
+import dataframe.transformation.types.to.ToTimestampTransformation;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

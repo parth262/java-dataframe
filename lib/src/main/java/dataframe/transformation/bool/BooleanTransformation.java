@@ -1,7 +1,7 @@
 package dataframe.transformation.bool;
 
-import dataframe.transformation.NonNullPrimitiveTransformation;
-import dataframe.transformation.base.from.FromBooleanTransformation;
+import dataframe.transformation.base.NonNullPrimitiveTransformation;
+import dataframe.transformation.types.from.FromBooleanTransformation;
 
 public abstract class BooleanTransformation
     extends NonNullPrimitiveTransformation

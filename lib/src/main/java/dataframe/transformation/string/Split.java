@@ -1,6 +1,6 @@
 package dataframe.transformation.string;
 
-import dataframe.transformation.base.array.to.ToStringArrayTransformation;
+import dataframe.transformation.types.array.to.ToStringArrayTransformation;
 
 public class Split extends StringTransformation implements ToStringArrayTransformation {
 

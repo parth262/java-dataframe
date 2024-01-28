@@ -1,6 +1,6 @@
 package dataframe.transformation.bool;
 
-import dataframe.transformation.base.to.ToBooleanTransformation;
+import dataframe.transformation.types.to.ToBooleanTransformation;
 
 public class Not extends BooleanTransformation implements ToBooleanTransformation {
 

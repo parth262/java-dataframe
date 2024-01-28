@@ -37,6 +37,18 @@ public class Schema {
         return new Schema(newFields);
     }
 
+    public Schema select(String... columns) {
+        var newFields = new ArrayList<SchemaField>();
+        for(var column: columns) {
+            var columnIndex = this.indexOf(column);
+            if (columnIndex == -1) {
+                throw new RuntimeException("Unresolved column: " + column);
+            }
+            newFields.add(this.fields.get(columnIndex));
+        }
+        return new Schema(newFields);
+    }
+
     @SuppressWarnings("unchecked")
     public Schema drop(String... columns) {
         var newFields = (ArrayList<SchemaField>) this.fields.clone();
@@ -48,5 +60,10 @@ public class Schema {
 
     public List<SchemaField> getFields() {
         return List.copyOf(this.fields);
+    }
+
+    public Schema copy() {
+        var fieldsCopy = new ArrayList<>(this.fields);
+        return new Schema(fieldsCopy);
     }
 }

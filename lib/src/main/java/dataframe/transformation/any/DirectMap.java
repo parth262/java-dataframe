@@ -1,8 +1,8 @@
 package dataframe.transformation.any;
 
-import dataframe.transformation.NonNullPrimitiveTransformation;
-import dataframe.transformation.base.from.FromAnyTransformation;
-import dataframe.transformation.base.to.ToAnyTransformation;
+import dataframe.transformation.base.NonNullPrimitiveTransformation;
+import dataframe.transformation.types.from.FromAnyTransformation;
+import dataframe.transformation.types.to.ToAnyTransformation;
 
 import java.util.Map;
 

@@ -4,7 +4,7 @@ import dataframe.types.Schema;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.stream.Collectors;
 
 
 public class Row {
@@ -63,17 +63,17 @@ public class Row {
         return (T) get(i);
     }
 
-    @SuppressWarnings("unchecked")
-    public Row drop(String[] columns, Schema newSchema) {
-        var newData = (ArrayList<Object>) this.data.clone();
-        var indicesToRemove = Arrays.stream(columns)
+    public Row getBySchema(Schema newSchema) {
+        var newData = newSchema.fieldNames().stream()
             .map(this::fieldIndex)
-            .sorted(Comparator.reverseOrder())
-            .toArray(Integer[]::new);
-        for(int index: indicesToRemove) {
-            newData.remove(index);
-        }
+            .sorted()
+            .map(this.data::get)
+            .collect(Collectors.toCollection(ArrayList::new));
         return new Row(newData, newSchema);
+    }
+
+    public Object[] getValues() {
+        return this.data.toArray();
     }
 
     @Override

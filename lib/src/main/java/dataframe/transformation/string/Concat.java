@@ -1,6 +1,6 @@
 package dataframe.transformation.string;
 
-import dataframe.transformation.base.to.ToStringTransformation;
+import dataframe.transformation.types.to.ToStringTransformation;
 
 public class Concat extends StringArrayTransformation implements ToStringTransformation {
     private final String separator;

@@ -1,6 +1,6 @@
 package dataframe.transformation.supplier;
 
-import dataframe.transformation.SupplierTransformation;
+import dataframe.transformation.base.SupplierTransformation;
 import dataframe.types.DataType;
 import dataframe.types.DataTypeUtil;
 

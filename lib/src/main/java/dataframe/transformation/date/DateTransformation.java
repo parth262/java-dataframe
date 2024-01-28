@@ -1,7 +1,7 @@
 package dataframe.transformation.date;
 
-import dataframe.transformation.NonNullPrimitiveTransformation;
-import dataframe.transformation.base.from.FromDateTransformation;
+import dataframe.transformation.base.NonNullPrimitiveTransformation;
+import dataframe.transformation.types.from.FromDateTransformation;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;

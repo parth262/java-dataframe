@@ -1,6 +1,6 @@
 package dataframe.transformation.string;
 
-import dataframe.transformation.base.to.ToDateTransformation;
+import dataframe.transformation.types.to.ToDateTransformation;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

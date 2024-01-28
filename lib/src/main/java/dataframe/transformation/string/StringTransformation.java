@@ -1,7 +1,7 @@
 package dataframe.transformation.string;
 
-import dataframe.transformation.NonNullPrimitiveTransformation;
-import dataframe.transformation.base.from.FromStringTransformation;
+import dataframe.transformation.base.NonNullPrimitiveTransformation;
+import dataframe.transformation.types.from.FromStringTransformation;
 
 public abstract class StringTransformation
     extends NonNullPrimitiveTransformation

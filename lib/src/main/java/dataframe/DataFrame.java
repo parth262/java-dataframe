@@ -24,6 +24,10 @@ public class DataFrame {
         return this.schema.fieldNames();
     }
 
+    public List<Object[]> getRows() {
+        return Arrays.stream(this.rows).map(Row::getValues).toList();
+    }
+
     public static DataFrame empty() {
         return new DataFrame(new Row[]{}, Schema.empty());
     }
@@ -43,6 +47,10 @@ public class DataFrame {
         return new DataFrame(rows, schema);
     }
 
+    public int count() {
+        return this.rows.length;
+    }
+
     public DataFrame withColumn(String newColumn, ColumnTransformation columnTransformation) {
         var existingIndex = this.schema.indexOf(newColumn);
         var newSchema = this.schema.addColumn(newColumn, columnTransformation.transformation().getOutputType());
@@ -53,12 +61,36 @@ public class DataFrame {
         return new DataFrame(newRows, newSchema);
     }
 
+    public DataFrame select(String... columns) {
+        var newSchema = this.schema.select(columns);
+        var newRows = Arrays.stream(this.rows)
+            .map(row -> row.getBySchema(newSchema))
+            .toArray(Row[]::new);
+        return new DataFrame(newRows, newSchema);
+    }
+
     public DataFrame drop(String... columns) {
         var newSchema = this.schema.drop(columns);
         var newRows = Arrays.stream(this.rows)
-            .map(row -> row.drop(columns, newSchema))
+            .map(row -> row.getBySchema(newSchema))
             .toArray(Row[]::new);
         return new DataFrame(newRows, newSchema);
+    }
+
+    public DataFrame where(ColumnTransformation transformation) {
+        var schema = this.schema.copy();
+        var filteredRows = Arrays.stream(this.rows).parallel()
+            .filter(row -> {
+                var value = ColumnTransformationEvaluator.evaluate(transformation, row);
+                assert value instanceof Boolean;
+                return (boolean) value;
+            }).toArray(Row[]::new);
+        return new DataFrame(filteredRows, schema);
+    }
+
+    public DataFrame copy() {
+        var rowsCopy = Arrays.copyOf(this.rows, this.rows.length);
+        return new DataFrame(rowsCopy, schema.copy());
     }
 
     @Override

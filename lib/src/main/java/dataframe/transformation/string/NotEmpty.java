@@ -1,6 +1,6 @@
 package dataframe.transformation.string;
 
-import dataframe.transformation.base.to.ToBooleanTransformation;
+import dataframe.transformation.types.to.ToBooleanTransformation;
 
 public class NotEmpty extends StringTransformation implements ToBooleanTransformation {
 

@@ -133,7 +133,7 @@ public class DataFrame {
         return new DataFrame(newRows, newSchema);
     }
 
-    public DataFrame verticalConcat(DataFrame other) {
+    public DataFrame unionAll(DataFrame other) {
         assert this.schema.equals(other.schema);
         var otherDataFrame = other.select(this.schema.fieldNames().toArray(String[]::new));
         var newRows = new Row[this.rows.length + other.rows.length];
@@ -142,13 +142,13 @@ public class DataFrame {
         return new DataFrame(newRows, this.schema.copy());
     }
 
-    public DataFrame horizontalConcat(DataFrame other) {
+    public DataFrame concat(DataFrame other) {
         assert this.count() == other.count();
         var totalRows = this.count();
-        var newSchema = this.schema.horizontalConcat(other.schema);
+        var newSchema = this.schema.concat(other.schema);
         var newRows = new Row[totalRows];
         for(int i=0;i<totalRows;i++) {
-            newRows[i] = this.rows[i].horizontalConcat(other.rows[i], newSchema);
+            newRows[i] = this.rows[i].concat(other.rows[i], newSchema);
         }
         return new DataFrame(newRows, newSchema);
     }

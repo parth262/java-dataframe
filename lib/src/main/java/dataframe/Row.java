@@ -38,7 +38,7 @@ public class Row {
         return new Row(newData, newSchema);
     }
 
-    Row horizontalConcat(Row other, Schema newSchema) {
+    Row concat(Row other, Schema newSchema) {
         var newData = new ArrayList<>();
         newData.addAll(this.data);
         newData.addAll(other.data);

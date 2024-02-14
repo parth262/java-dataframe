@@ -124,4 +124,24 @@ class DataFrameTests {
         assertEquals(isExperienced, groupedDataFrame.getDataFrame(true));
         assertEquals(isNotExperienced, groupedDataFrame.getDataFrame(false));
     }
+
+    @Test
+    void unionAllTest() {
+        var newData = List.of(
+                new Object[]{4, "kruti", "mehta", false, "p/q/r"},
+                new Object[]{5, "deep", "erda", true, "m/n/o"}
+        );
+        var columns = new String[]{"id", "first_name", "last_name", "is_experienced", "path"};
+        var expectedData = List.of(
+                new Object[]{ 1, "parth", "pandya", true, "a/b/c" },
+                new Object[]{ 2, "arpan", "shah", true, "d/e/f" },
+                new Object[]{ 3, "ankit", "rathavi", false, "g/h/i" },
+                new Object[]{4, "kruti", "mehta", false, "p/q/r"},
+                new Object[]{5, "deep", "erda", true, "m/n/o"}
+        );
+        var otherDataFrame = DataFrame.create(newData, columns);
+        var expectedDF = DataFrame.create(expectedData, columns);
+        var actualDF = dataframe.unionAll(otherDataFrame);
+        assertEquals(expectedDF, actualDF);
+    }
 }

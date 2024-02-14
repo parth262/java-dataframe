@@ -27,7 +27,7 @@ public class Schema {
         return -1;
     }
 
-    public Schema horizontalConcat(Schema other) {
+    public Schema concat(Schema other) {
         var newSchemaFields = new ArrayList<SchemaField>();
         newSchemaFields.addAll(this.fields);
         newSchemaFields.addAll(other.fields);

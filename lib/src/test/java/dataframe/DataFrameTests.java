@@ -31,7 +31,7 @@ class DataFrameTests {
         dataframeCopy = dataframeCopy.withColumn("not_experienced", not("is_experienced"));
         dataframeCopy = dataframeCopy.withColumn("name", concat_ws(" ", "first_name", "last_name"));
         dataframeCopy = dataframeCopy.withColumn("first_name", capitalize("first_name"));
-        dataframeCopy = dataframeCopy.withColumn("path_components", split("/", "path"));
+        dataframeCopy = dataframeCopy.withColumn("path_components", split("path", "/"));
         dataframeCopy = dataframeCopy.withColumn("dept", lit("IT"));
         dataframeCopy = dataframeCopy.withColumn("created_at", currentTimestamp());
         dataframeCopy = dataframeCopy.drop("is_experienced", "last_name");

@@ -10,4 +10,9 @@ public abstract class DataType {
         }
         return this.getSimpleName().equals(other.getSimpleName());
     }
+
+    @Override
+    public int hashCode() {
+        return this.getSimpleName().hashCode();
+    }
 }

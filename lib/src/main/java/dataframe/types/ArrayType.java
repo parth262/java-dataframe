@@ -7,6 +7,10 @@ public class ArrayType extends DataType {
         this.itemType = itemType;
     }
 
+    public DataType getItemType() {
+        return itemType;
+    }
+
     @Override
     public String getSimpleName() {
         return String.format("array<%s>", this.itemType.getSimpleName());

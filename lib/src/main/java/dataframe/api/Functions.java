@@ -1,16 +1,18 @@
 package dataframe.api;
 
 import dataframe.transformation.ColumnTransformation;
-import static dataframe.transformation.ColumnTransformation.of;
-
 import dataframe.transformation.any.*;
 import dataframe.transformation.bool.Not;
 import dataframe.transformation.date.Format;
 import dataframe.transformation.string.*;
 import dataframe.transformation.supplier.CurrentTimestamp;
 import dataframe.transformation.supplier.Literal;
+import dataframe.types.ArrayType;
+import dataframe.types.SchemaField;
 
 import java.util.Map;
+
+import static dataframe.transformation.ColumnTransformation.of;
 
 public class Functions {
 
@@ -26,12 +28,12 @@ public class Functions {
         return of(new Not(), column);
     }
 
-    public static ColumnTransformation trim(String column) {
-        return of(new Trim(), column);
+    public static ColumnTransformation equals(String column, Object value) {
+        return of(new Equals(value), column);
     }
 
-    public static ColumnTransformation split(String regex, String column) {
-        return of(new Split(regex), column);
+    public static ColumnTransformation trim(String column) {
+        return of(new Trim(), column);
     }
 
     public static ColumnTransformation lit(Object value) {
@@ -100,6 +102,24 @@ public class Functions {
 
     public static ColumnTransformation isEquals(String column, Object value) {
         return of(new Equals(value), column);
+    }
+
+    public static ColumnTransformation split(String column, String regex) {
+        return of(new Split(regex), column);
+    }
+
+    public static ColumnTransformation elementAt(SchemaField field, int at) {
+        if(field.dataType() instanceof ArrayType arrayType) {
+            return of(new ElementAt(arrayType, at), field.name());
+        }
+        throw new IllegalArgumentException("column with array type expected, received: " + field.dataType().getSimpleName());
+    }
+
+    public static ColumnTransformation pad(
+            String column, char paddingCharacter,
+            String direction, int maxValueLength
+    ) {
+        return of(new Padding(paddingCharacter, direction, maxValueLength), column);
     }
 
 }

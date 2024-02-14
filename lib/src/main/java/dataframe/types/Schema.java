@@ -2,6 +2,7 @@ package dataframe.types;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Schema {
     private final ArrayList<SchemaField> fields;
@@ -24,6 +25,13 @@ public class Schema {
             }
         }
         return -1;
+    }
+
+    public Schema horizontalConcat(Schema other) {
+        var newSchemaFields = new ArrayList<SchemaField>();
+        newSchemaFields.addAll(this.fields);
+        newSchemaFields.addAll(other.fields);
+        return new Schema(newSchemaFields);
     }
 
     public SchemaField get(String name) {
@@ -65,9 +73,9 @@ public class Schema {
     }
 
     public Schema join(Schema other) {
-        var newFields = new ArrayList<>(this.fields);
-        newFields.addAll(other.fields);
-        return new Schema(newFields);
+       var newFields = new ArrayList<>(this.fields);
+       newFields.addAll(other.fields);
+       return new Schema(newFields);
     }
 
     public List<SchemaField> getFields() {
@@ -77,5 +85,18 @@ public class Schema {
     public Schema copy() {
         var fieldsCopy = new ArrayList<>(this.fields);
         return new Schema(fieldsCopy);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Schema schema = (Schema) o;
+        return Objects.equals(fields, schema.fields);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fields);
     }
 }

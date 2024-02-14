@@ -1,6 +1,8 @@
 package dataframe.transformation;
 
 import dataframe.Row;
+import dataframe.exceptions.InvalidTransformationOnMultipleColumnsException;
+import dataframe.transformation.base.GenericArrayTransformation;
 import dataframe.transformation.base.PrimitiveArrayTransformation;
 import dataframe.transformation.base.PrimitiveTransformation;
 import dataframe.transformation.base.SupplierTransformation;
@@ -14,6 +16,10 @@ public class ColumnTransformationEvaluator {
         if (transformation instanceof SupplierTransformation) {
             return ((SupplierTransformation) transformation).get();
         }
+        if(transformation instanceof GenericArrayTransformation genericArrayTransformation) {
+            var columnValue = row.get(columnTransformation.columns()[0]);
+            return genericArrayTransformation.apply(columnValue);
+        }
         if(transformation instanceof PrimitiveArrayTransformation arrayTransformation) {
             var columnValues = Arrays.stream(columnTransformation.columns()).parallel()
                 .map(row::get)
@@ -26,7 +32,7 @@ public class ColumnTransformationEvaluator {
                     "%s: This transformation takes only 1 column",
                     primitiveTransformation.getClass().getSimpleName()
                 );
-                throw new RuntimeException(errorMessage);
+                throw new InvalidTransformationOnMultipleColumnsException(errorMessage);
             }
             var columnValue = row.get(columnTransformation.columns()[0]);
             return primitiveTransformation.apply(columnValue);

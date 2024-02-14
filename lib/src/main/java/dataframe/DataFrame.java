@@ -1,6 +1,5 @@
 package dataframe;
 
-import dataframe.api.Functions;
 import dataframe.grouped.GroupKeys;
 import dataframe.grouped.GroupedDataFrame;
 import dataframe.transformation.ColumnTransformation;
@@ -8,6 +7,7 @@ import dataframe.transformation.ColumnTransformationEvaluator;
 import dataframe.types.DataTypeUtil;
 import dataframe.types.Schema;
 import dataframe.types.SchemaField;
+import dataframe.types.StringType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +27,10 @@ public class DataFrame {
         return this.schema.fieldNames();
     }
 
+    public SchemaField getField(String name) {
+        return this.schema.get(name);
+    }
+
     public List<Object[]> getRows() {
         return Arrays.stream(this.rows).map(Row::getValues).toList();
     }
@@ -34,13 +38,21 @@ public class DataFrame {
     public static DataFrame empty() {
         return new DataFrame(new Row[]{}, Schema.empty());
     }
+
     public static DataFrame create(List<Object[]> data, String[] columns) {
         var fields = new ArrayList<SchemaField>();
-        var firstRow = data.get(0);
-        for(int i=0;i<columns.length;i++) {
-            var columnValue = firstRow[i];
-            var dataType = DataTypeUtil.infer(columnValue);
-            fields.add(new SchemaField(columns[i], dataType));
+        if(data.isEmpty()) {
+            for (String column : columns) {
+                var dataType = new StringType();
+                fields.add(new SchemaField(column, dataType));
+            }
+        } else {
+            var firstRow = data.get(0);
+            for (int i = 0; i < columns.length; i++) {
+                var columnValue = firstRow[i];
+                var dataType = DataTypeUtil.infer(columnValue);
+                fields.add(new SchemaField(columns[i], dataType));
+            }
         }
         var schema = new Schema(fields);
         var rows = data.stream().map(dataRow -> {
@@ -91,11 +103,6 @@ public class DataFrame {
         return new DataFrame(filteredRows, schema);
     }
 
-    public DataFrame copy() {
-        var rowsCopy = Arrays.copyOf(this.rows, this.rows.length);
-        return new DataFrame(rowsCopy, schema.copy());
-    }
-
     public GroupedDataFrame groupBy(String... columns) {
         var dataframeGroups = Arrays.stream(this.rows).collect(
                 Collectors.groupingBy(
@@ -126,6 +133,31 @@ public class DataFrame {
         return new DataFrame(newRows, newSchema);
     }
 
+    public DataFrame verticalConcat(DataFrame other) {
+        assert this.schema.equals(other.schema);
+        var otherDataFrame = other.select(this.schema.fieldNames().toArray(String[]::new));
+        var newRows = new Row[this.rows.length + other.rows.length];
+        System.arraycopy(this.rows, 0, newRows, 0, this.rows.length);
+        System.arraycopy(otherDataFrame.rows, 0, newRows, this.rows.length, otherDataFrame.rows.length);
+        return new DataFrame(newRows, this.schema.copy());
+    }
+
+    public DataFrame horizontalConcat(DataFrame other) {
+        assert this.count() == other.count();
+        var totalRows = this.count();
+        var newSchema = this.schema.horizontalConcat(other.schema);
+        var newRows = new Row[totalRows];
+        for(int i=0;i<totalRows;i++) {
+            newRows[i] = this.rows[i].horizontalConcat(other.rows[i], newSchema);
+        }
+        return new DataFrame(newRows, newSchema);
+    }
+
+    public DataFrame copy() {
+        var rowsCopy = Arrays.copyOf(this.rows, this.rows.length);
+        return new DataFrame(rowsCopy, schema.copy());
+    }
+
     @Override
     public String toString() {
         var stringArray = new ArrayList<String>();
@@ -142,12 +174,15 @@ public class DataFrame {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DataFrame other = (DataFrame) o;
-        return this.toString().equals(other.toString());
+        DataFrame dataFrame = (DataFrame) o;
+        if (!Arrays.equals(rows, dataFrame.rows)) return false;
+        return schema.equals(dataFrame.schema);
     }
 
     @Override
     public int hashCode() {
-        return this.toString().hashCode();
+        int result = Arrays.hashCode(rows);
+        result = 31 * result + schema.hashCode();
+        return result;
     }
 }

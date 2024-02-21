@@ -122,4 +122,12 @@ public class Functions {
         return of(new Padding(paddingCharacter, direction, maxValueLength), column);
     }
 
+    public static ColumnTransformation replaceNull(String column, Object defaultValue) {
+        return of(new ReplaceNull(defaultValue), column);
+    }
+
+    public static ColumnTransformation replaceNull(String column, Object defaultValue, boolean emptyStringIsNull) {
+        return of(new ReplaceNull(defaultValue, emptyStringIsNull), column);
+    }
+
 }

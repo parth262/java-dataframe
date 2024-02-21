@@ -68,4 +68,23 @@ public class FunctionsTests {
         assertEquals(expectedDF, actualDF);
     }
 
+    @Test void replaceNullTest() {
+        var columns = new String[] {"discount", "comment"};
+        var data = List.of(
+                new Object[] {15, "15% discount"},
+                new Object[] {null, ""}
+        );
+        var df = DataFrame.create(data, columns);
+        var coalesceFunction1 = Functions.replaceNull("discount", 10);
+        var coalesceFunction2 = Functions.replaceNull("comment", "10% discount", true);
+        var expectedData = List.of(
+                new Object[] {15, "15% discount"},
+                new Object[] {10, "10% discount"}
+        );
+        var expectedDF = DataFrame.create(expectedData, columns);
+        var actualDF = df.withColumn("discount", coalesceFunction1)
+                .withColumn("comment", coalesceFunction2);
+        assertEquals(expectedDF, actualDF);
+    }
+
 }

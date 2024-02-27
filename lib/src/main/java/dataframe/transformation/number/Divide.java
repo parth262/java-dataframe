@@ -11,6 +11,6 @@ public class Divide extends NumberArrayTransformation implements ToNumberTransfo
         if(secondValue.doubleValue() ==0.0) {
             throw new UnsupportedOperationException("Unsupported data, divide by zero: " + secondValue);
         }
-        return String.valueOf(firstValue.doubleValue() / secondValue.doubleValue());
+        return firstValue.doubleValue() / secondValue.doubleValue();
     }
 }

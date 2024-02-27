@@ -8,6 +8,6 @@ public class Power extends NumberArrayTransformation implements ToNumberTransfor
     protected Object applyOnNumber(Number... s) {
         Number firstValue = s[0];
         Number secondValue = s[1];
-        return String.valueOf(Math.pow(firstValue.doubleValue(), secondValue.doubleValue()));
+        return Math.pow(firstValue.doubleValue(), secondValue.doubleValue());
     }
 }

@@ -9,13 +9,13 @@ public class Multiple extends NumberArrayTransformation implements ToNumberTrans
         Number firstValue = s[0];
         Number secondValue = s[1];
         if(firstValue instanceof Double || secondValue instanceof Double) {
-            return String.valueOf(firstValue.doubleValue() * secondValue.doubleValue());
+            return firstValue.doubleValue() * secondValue.doubleValue();
         } else if(firstValue instanceof Float || secondValue instanceof Float){
-            return String.valueOf(firstValue.floatValue() * secondValue.floatValue());
+            return firstValue.floatValue() * secondValue.floatValue();
         } else if(firstValue instanceof Long || secondValue instanceof Long){
-            return String.valueOf(firstValue.longValue() * secondValue.longValue());
+            return firstValue.longValue() * secondValue.longValue();
         } else if(firstValue instanceof Integer || secondValue instanceof Integer){
-            return String.valueOf(firstValue.floatValue() * secondValue.floatValue());
+            return firstValue.floatValue() * secondValue.floatValue();
         } else {
             throw new UnsupportedOperationException("Unsupported data type: " + firstValue.getClass());
         }

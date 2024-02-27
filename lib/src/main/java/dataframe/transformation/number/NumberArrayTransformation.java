@@ -10,15 +10,15 @@ import java.text.ParseException;
 public abstract class NumberArrayTransformation extends PrimitiveArrayTransformation implements FromNumberArrayTransformation {
     @Override
     protected Object applyArray(Object... o) {
-        try {
-            var numberArray = new Number[o.length];
-            for(int i=0;i<o.length;i++) {
+        var numberArray = new Number[o.length];
+        for(int i=0;i<o.length;i++) {
+            try {
                 numberArray[i] = NumberFormat.getInstance().parse(String.valueOf(o[i]));
+            } catch (ParseException pe){
+                throw new UnsupportedOperationException("Values should be of numeric type, found "+ o[i]);
             }
-            return this.applyOnNumber(numberArray);
-        }catch (ParseException pe){
-            return null;
         }
+        return this.applyOnNumber(numberArray);
 
     }
 

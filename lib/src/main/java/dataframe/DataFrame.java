@@ -9,9 +9,7 @@ import dataframe.types.Schema;
 import dataframe.types.SchemaField;
 import dataframe.types.StringType;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DataFrame {
@@ -117,6 +115,19 @@ public class DataFrame {
                 )
         );
         return new GroupedDataFrame(dataframeGroups);
+    }
+
+    public DataFrame sort(String column){
+        return sort(column,"asc");
+    }
+    public DataFrame sort(String column, String type) {
+        List<Row> rows = Arrays.asList(this.rows);
+        Comparator<Row> comparator = (row1, row2) -> row1.compareOnColumn(row2, column);
+        if ("desc".equalsIgnoreCase(type)) {
+            comparator = comparator.reversed();
+        }
+        Collections.sort(rows, comparator);
+        return new DataFrame(rows.toArray(new Row[rows.size()]), schema);
     }
 
     public DataFrame join(DataFrame other, String leftColumn, String rightColumn) {

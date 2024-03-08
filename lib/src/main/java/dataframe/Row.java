@@ -66,7 +66,7 @@ public class Row {
         return this.getAs(i);
     }
     public String getString(String column) {
-        return this.data.get(this.fieldIndex(column)).toString();
+        return String.valueOf(this.data.get(this.fieldIndex(column)));
     }
     public Integer getInteger(int i) {
         return this.<Integer>getAs(i);

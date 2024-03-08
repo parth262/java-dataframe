@@ -65,6 +65,9 @@ public class Row {
     public String getString(int i) {
         return this.getAs(i);
     }
+    public String getString(String column) {
+        return this.data.get(this.fieldIndex(column)).toString();
+    }
     public Integer getInteger(int i) {
         return this.<Integer>getAs(i);
     }
@@ -159,6 +162,17 @@ public class Row {
             }
             return Objects.equals(thisColumnValue, otherColumnValue);
         });
+    }
+
+    public int compareOnColumn(Row row, String column){
+        var columnType = this.schema.get(column).name();
+        return switch(columnType){
+            case "string": yield this.getString(column).compareTo(row.getString(column));
+            case "integer": yield Integer.compare(Integer.valueOf(this.getString(column)), Integer.valueOf(row.getString(column)));
+            case "double": yield Double.compare(Double.valueOf(this.getString(column)), Double.valueOf(row.getString(column)));
+            case "boolean": yield Boolean.compare(Boolean.valueOf(this.getString(column)), Boolean.valueOf(row.getString(column)));
+            case "float": yield Float.compare(Float.valueOf(this.getString(column)), Float.valueOf(row.getString(column)));
+        };
     }
 
     @Override

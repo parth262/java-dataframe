@@ -117,9 +117,16 @@ public class DataFrame {
         return new GroupedDataFrame(dataframeGroups);
     }
 
-    public DataFrame sort(String column) {
+    public DataFrame sort(String column){
+        return sort(column,"asc");
+    }
+    public DataFrame sort(String column, String type) {
         List<Row> rows = Arrays.asList(this.rows);
-        Collections.sort(rows, (row1, row2)-> row1.compareOnColumn(row2, column));
+        Comparator<Row> comparator = (row1, row2) -> row1.compareOnColumn(row2, column);
+        if ("desc".equalsIgnoreCase(type)) {
+            comparator = comparator.reversed();
+        }
+        Collections.sort(rows, comparator);
         return new DataFrame(rows.toArray(new Row[rows.size()]), schema);
     }
 

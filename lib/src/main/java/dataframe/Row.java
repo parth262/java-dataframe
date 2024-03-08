@@ -165,13 +165,15 @@ public class Row {
     }
 
     public int compareOnColumn(Row row, String column){
-        var columnType = this.schema.get(column).name();
+        var columnType = this.schema.get(column).dataType().getSimpleName();
+        System.out.println("column" +" "+columnType);
         return switch(columnType){
             case "string": yield this.getString(column).compareTo(row.getString(column));
             case "integer": yield Integer.compare(Integer.valueOf(this.getString(column)), Integer.valueOf(row.getString(column)));
             case "double": yield Double.compare(Double.valueOf(this.getString(column)), Double.valueOf(row.getString(column)));
             case "boolean": yield Boolean.compare(Boolean.valueOf(this.getString(column)), Boolean.valueOf(row.getString(column)));
             case "float": yield Float.compare(Float.valueOf(this.getString(column)), Float.valueOf(row.getString(column)));
+            default: yield -1;
         };
     }
 

@@ -173,4 +173,44 @@ class DataFrameTests {
         var actualDF = dataframe.concat(df);
         assertEquals(expectedDF, actualDF);
     }
+
+    @Test
+    void sortAscTest(){
+        var dfList = List.of(
+                new Object[]{1, "parth", "pandya", true, "a/b/c", "A,B"},
+                new Object[]{2, "arpan", "shah", true, "d/e/f", "A"},
+                new Object[]{3, "ankit", "rathavi", false, "g/h/i", "A"}
+        );
+        var expectedList = List.of(
+                new Object[]{3, "ankit", "rathavi", false, "g/h/i", "A"},
+                new Object[]{2, "arpan", "shah", true, "d/e/f", "A"},
+                new Object[]{1, "parth", "pandya", true, "a/b/c", "A,B"}
+        );
+        var columns =new String[]{"id", "first_name", "last_name", "is_experienced", "path", "project"};
+        var df = DataFrame.create(dfList, columns);
+        var expectedDF = DataFrame.create(expectedList, columns);
+        var newDF = df.sort("first_name");
+        assertEquals(newDF, expectedDF);
+
+    }
+
+    @Test
+    void sortDescTest(){
+        var dfList = List.of(
+                new Object[]{2, "ankit", "rathavi", false, "g/h/i", "A"},
+                new Object[]{1, "parth", "pandya", true, "a/b/c", "A,B"},
+                new Object[]{3, "arpan", "shah", true, "d/e/f", "A"}
+        );
+        var expectedList = List.of(
+                new Object[]{3, "arpan", "shah", true, "d/e/f", "A"},
+                new Object[]{2, "ankit", "rathavi", false, "g/h/i", "A"},
+                new Object[]{1, "parth", "pandya", true, "a/b/c", "A,B"}
+        );
+        var columns =new String[]{"id", "first_name", "last_name", "is_experienced", "path", "project"};
+        var df = DataFrame.create(dfList, columns);
+        var expectedDF = DataFrame.create(expectedList, columns);
+        var newDF = df.sort("id", "desc");
+        assertEquals(newDF, expectedDF);
+
+    }
 }
